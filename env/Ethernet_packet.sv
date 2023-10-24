@@ -8,7 +8,9 @@ class Ethernet_packet;
 
 	rand bit [47:0] source_address;
 	rand bit [47:0] destination_address;
-	rand byte packet_data[$];                 //queue of packet data without Source add, dest add and crc
+	rand byte packet_data[$];                 //queue of packet data (payload) without Source add, dest add and crc
+	bit [1:0] frame_type;			 //Ethernet type such as: IPv4, ARP, IPv6, etc.
+	bit [1:0] packet_type;			 //type of Ethernet Frame payload
 	bit [31:0] packet_CRC;
 	int packet_size;                         //Total size of the packet
 	byte full_packet[$];                     //Queue of full ethernet Packet with source and destination address and CRC
@@ -18,7 +20,7 @@ class Ethernet_packet;
 		
 	function void build_packet(); 	                   //function to create build entire packet
 		int packet_size;
-		packet_size = $urandom_range(4,24);           //minimum size of the packet should be 4 Bytes and max should be 24 Bytes
+		packet_size = $urandom_range(46,1500);           //minimum size of the packet should be 4 Bytes and max should be 24 Bytes
 		packet_size = (packet_size>>2)<<2;
 		for( int i = 0; i<= packet_size; i++)
 			begin
@@ -58,8 +60,8 @@ class Ethernet_packet;
 	endfunction
 	
 	function void post_randomize();
-		packet_size = packet_data.size() +4 +4 +4; //size of data + source add + dest add + CRC all in bytes
-		build_address();
+		packet_size = packet_data.size() +6 +6 +2 +4; //size of data + source add + dest add + type + CRC all in bytes
+		build_address(); //fixed address
 		build_packet();
 		build_crc();
 		for( int i = 0; i <4 ; i++)
