@@ -6,8 +6,8 @@
 
 class Ethernet_packet;
 
-	rand bit [31:0] source_address;
-	rand bit [31:0] destination_address;
+	rand bit [47:0] source_address;
+	rand bit [47:0] destination_address;
 	rand byte packet_data[$];                 //queue of packet data without Source add, dest add and crc
 	bit [31:0] packet_CRC;
 	int packet_size;                         //Total size of the packet
@@ -36,23 +36,23 @@ class Ethernet_packet;
 		case(random_num)
 		 0:
 			begin
-				source_address = 16'hABCD;
-				destination_address = 16'hBEEF;
+				source_address = 48'hAABB_CCDD_EEFF;
+				destination_address = 48'hBEEF_BEEF_BEEF;
 			end
 		1:
 			begin
-				source_address = 16'hBEEF;
-				destination_address = 16'hABCD;
+				source_address = 48'h1111_2222_3333;
+				destination_address = 48'hBEEF_BEEF_BEEF;
 			end
 		2:
 			begin
-				source_address = 16'hABCD;
-				destination_address = 16'hABCD;
+				source_address = 48'hAABB_CCDD_EEFF;
+				destination_address = 48'hBEEF_BEEF_BEEF;
 			end
 		3:
 			begin
-				source_address = 16'hBEEF;
-				destination_address = 16'hBEEF;
+				source_address = 48'hAABB_CCDD_EEFF;
+				destination_address = 48'hBEEF_BEEF_BEEF;
 			end
 		endcase
 	endfunction
